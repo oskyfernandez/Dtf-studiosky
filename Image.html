@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DTF Studio</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#0b0d12;
+    color:#fff;
+    min-height:100vh;
+}
+
+.app{
+    width:100%;
+    max-width:650px;
+    margin:auto;
+    padding:20px 15px 40px;
+}
+
+header{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.logo{
+    font-size:34px;
+    font-weight:900;
+    letter-spacing:1px;
+}
+
+.logo span{
+    color:#7c4dff;
+}
+
+.subtitle{
+    color:#9ca3af;
+    margin-top:7px;
+    font-size:14px;
+}
+
+.card{
+    background:#151820;
+    border:1px solid #252a35;
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,.18);
+}
+
+.upload{
+    border:2px dashed #414754;
+    border-radius:16px;
+    min-height:170px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:20px;
+    cursor:pointer;
+}
+
+.upload:hover{
+    border-color:#7c4dff;
+}
+
+.upload-icon{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+.upload-title{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.upload-sub{
+    color:#8f96a3;
+    font-size:13px;
+    margin-top:6px;
+}
+
+input[type=file]{
+    display:none;
+}
+
+.preview{
+    display:none;
+    text-align:center;
+}
+
+.preview img{
+    max-width:100%;
+    max-height:350px;
+    object-fit:contain;
+    border-radius:12px;
+    background:
+    linear-gradient(45deg,#ddd 25%,transparent 25%),
+    linear-gradient(-45deg,#ddd 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,#ddd 75%),
+    linear-gradient(-45deg,transparent 75%,#ddd 75%);
+    background-size:20px 20px;
+    background-position:0 0,0 10px,10px -10px,-10px 0;
+}
+
+.controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.control{
+    background:#1c2029;
+    border:1px solid #2c323e;
+    border-radius:12px;
+    padding:12px;
+}
+
+.control label{
+    display:block;
+    color:#a8afbd;
+    font-size:12px;
+    margin-bottom:7px;
+}
+
+select,
+input[type=number]{
+    width:100%;
+    background:#0f1117;
+    color:white;
+    border:1px solid #343a46;
+    border-radius:9px;
+    padding:10px;
+    outline:none;
+}
+
+input[type=range]{
+    width:100%;
+}
+
+.switch{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.switch input{
+    width:20px;
+    height:20px;
+}
+
+.btn{
+    width:100%;
+    border:0;
+    border-radius:13px;
+    padding:15px;
+    font-size:16px;
+    font-weight:800;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+.primary{
+    background:#7c4dff;
+    color:white;
+}
+
+.primary:active{
+    transform:scale(.98);
+}
+
+.secondary{
+    background:#252a35;
+    color:#fff;
+}
+
+.success{
+    background:#16a34a;
+    color:#fff;
+}
+
+.danger{
+    background:#dc2626;
+    color:#fff;
+}
+
+.hidden{
+    display:none!important;
+}
+
+.section-title{
+    font-size:16px;
+    font-weight:bold;
+    margin-bottom:13px;
+}
+
+.value{
+    color:#7c4dff;
+    font-weight:bold;
+}
+
+.status{
+    text-align:center;
+    color:#9ca3af;
+    font-size:13px;
+    margin-top:12px;
+}
+
+.info{
+    background:#10131a;
+    border-radius:12px;
+    padding:13px;
+    margin-top:12px;
+    font-size:13px;
+    color:#aeb5c2;
+    line-height:1.6;
+}
+
+@media(max-width:430px){
+    .controls{
+        grid-template-columns:1fr;
+    }
+
+    .logo{
+        font-size:29px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+    <div class="logo">DTF <span>STUDIO</span></div>
+    <div class="subtitle">
+        Prepará tus diseños para DTF en pocos segundos
+    </div>
+</header>
+
+<div class="card">
+
+    <label class="upload" for="fileInput">
+
+        <div>
+            <div class="upload-icon">📤</div>
+
+            <div class="upload-title">
+                SUBIR IMAGEN
+            </div>
+
+            <div class="upload-sub">
+                JPG, PNG o WEBP
+            </div>
+        </div>
+
+    </label>
+
+    <input
+        id="fileInput"
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+    >
+
+</div>
+
+
+<div id="previewCard" class="card preview">
+
+    <div class="section-title">
+        Vista previa
+    </div>
+
+    <img id="previewImage">
+
+</div>
+
+
+<div id="tools" class="card hidden">
+
+    <div class="section-title">
+        ⚙️ Configuración
+    </div>
+
+    <div class="controls">
+
+        <div class="control">
+
+            <label>
+                Ampliación
+            </label>
+
+            <select id="scale">
+                <option value="1">Original</option>
+                <option value="2">2x</option>
+                <option value="4">4x</option>
+            </select>
+
+        </div>
+
+
+        <div class="control">
+
+            <label>
+                Semitono
+            </label>
+
+            <select id="halftone">
+                <option value="none">Desactivado</option>
+                <option value="dots">Puntos</option>
+                <option value="square">Cuadrados</option>
+            </select>
+
+        </div>
+
+
+        <div class="control">
+
+            <label>
+                Ancho (cm)
+            </label>
+
+            <input
+                type="number"
+                id="widthCm"
+                value="30"
+                min="1"
+                max="100"
+            >
+
+        </div>
+
+
+        <div class="control">
+
+            <label>
+                Alto (cm)
+            </label>
+
+            <input
+                type="number"
+                id="heightCm"
+                value="40"
+                min="1"
+                max="100"
+            >
+
+        </div>
+
+
+        <div class="control">
+
+            <label>
+                Contraste:
+                <span id="contrastValue" class="value">
+                    0
+                </span>
+            </label>
+
+            <input
+                type="range"
+                id="contrast"
+                min="-100"
+                max="100"
+                value="0"
+            >
+
+        </div>
+
+
+        <div class="control">
+
+            <label>
+                Nitidez:
+                <span id="sharpValue" class="value">
+                    0
+                </span>
+            </label>
+
+            <input
+                type="range"
+                id="sharpness"
+                min="0"
+                max="100"
+                value="0"
+            >
+
+        </div>
+
+
+        <div class="control">
+
+            <div class="switch">
+
+                <label>
+                    Fondo transparente
+                </label>
+
+                <input
+                    type="checkbox"
+                    id="transparent"
+                    checked
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="control">
+
+            <div class="switch">
+
+                <label>
+                    300 DPI
+                </label>
+
+                <input
+                    type="checkbox"
+                    id="dpi"
+                    checked
+                    disabled
+                >
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <button
+        class="btn primary"
+        onclick="prepareDTF()"
+    >
+        ⚡ PREPARAR PARA DTF
+    </button>
+
+
+    <button
+        class="btn secondary"
+        onclick="resetImage()"
+    >
+        🔄 RESTABLECER
+    </button>
+
+</div>
+
+
+<div id="resultCard" class="card hidden">
+
+    <div class="section-title">
+        ✅ Resultado
+    </div>
+
+    <img
+        id="resultImage"
+        style="width:100%;border-radius:12px;"
+    >
+
+    <div class="info">
+
+        <div>
+            📐 Tamaño:
+            <span id="resultSize"></span>
+        </div>
+
+        <div>
+            🖨️ Resolución:
+            <strong>300 DPI</strong>
+        </div>
+
+        <div>
+            📁 Formato:
+            <strong>PNG</strong>
+        </div>
+
+        <div>
+            🎨 Fondo:
+            <span id="resultBackground"></span>
+        </div>
+
+    </div>
+
+
+    <button
+        class="btn success"
+        onclick="downloadPNG()"
+    >
+        💾 DESCARGAR PNG
+    </button>
+
+</div>
+
+
+<div id="status" class="status"></div>
+
+</div>
+
+
+<script>
+
+let originalImage = null;
+let resultCanvas = null;
+
+
+/* ================================
+   CARGAR IMAGEN
+================================ */
+
+document
+.getElementById("fileInput")
+.addEventListener("change", function(e){
+
+    const file = e.target.files[0];
+
+    if(!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(event){
+
+        const img = new Image();
+
+        img.onload = function(){
+
+            originalImage = img;
+
+            document
+            .getElementById("previewImage")
+            .src = event.target.result;
+
+            document
+            .getElementById("previewCard")
+            .style.display = "block";
+
+            document
+            .getElementById("tools")
+            .classList.remove("hidden");
+
+            document
+            .getElementById("resultCard")
+            .classList.add("hidden");
+
+            status("Imagen cargada correctamente.");
+
+        };
+
+        img.src = event.target.result;
+
+    };
+
+    reader.readAsDataURL(file);
+
+});
+
+
+/* ================================
+   SLIDERS
+================================ */
+
+document
+.getElementById("contrast")
+.addEventListener("input",function(){
+
+    document
+    .getElementById("contrastValue")
+    .textContent = this.value;
+
+});
+
+
+document
+.getElementById("sharpness")
+.addEventListener("input",function(){
+
+    document
+    .getElementById("sharpValue")
+    .textContent = this.value;
+
+});
+
+
+/* ================================
+   PREPARAR DTF
+================================ */
+
+function prepareDTF(){
+
+    if(!originalImage){
+
+        alert("Primero cargá una imagen.");
+
+        return;
+    }
+
+    status("⚙️ Procesando imagen...");
+
+    setTimeout(function(){
+
+        const widthCm =
+            parseFloat(document.getElementById("widthCm").value);
+
+        const heightCm =
+            parseFloat(document.getElementById("heightCm").value);
+
+        const scale =
+            parseInt(document.getElementById("scale").value);
+
+        const contrast =
+            parseInt(document.getElementById("contrast").value);
+
+        const transparent =
+            document.getElementById("transparent").checked;
+
+        const halftone =
+            document.getElementById("halftone").value;
+
+
+        /* 300 DPI */
+
+        const DPI = 300;
+
+        const widthPx =
+            Math.round(widthCm / 2.54 * DPI);
+
+        const heightPx =
+            Math.round(heightCm / 2.54 * DPI);
+
+
+        let canvas =
+            document.createElement("canvas");
+
+        canvas.width = widthPx;
+        canvas.height = heightPx;
+
+        const ctx =
+            canvas.getContext("2d",{
+                willReadFrequently:true
+            });
+
+
+        ctx.clearRect(
+            0,
+            0,
+            widthPx,
+            heightPx
+        );
+
+
+        /* ==========================
+           AJUSTAR IMAGEN
+        ========================== */
+
+        const ratio =
+            Math.min(
+                widthPx / originalImage.width,
+                heightPx / originalImage.height
+            );
+
+        let drawWidth =
+            originalImage.width * ratio;
+
+        let drawHeight =
+            originalImage.height * ratio;
+
+
+        const x =
+            (widthPx - drawWidth) / 2;
+
+        const y =
+            (heightPx - drawHeight) / 2;
+
+
+        ctx.drawImage(
+            originalImage,
+            x,
+            y,
+            drawWidth,
+            drawHeight
+        );
+
+
+        /* ==========================
+           PIXELES
+        ========================== */
+
+        let imageData =
+            ctx.getImageData(
+                0,
+                0,
+                widthPx,
+                heightPx
+            );
+
+        let data =
+            imageData.data;
+
+
+        /* CONTRASTE */
+
+        const factor =
+            (259 * (contrast + 255)) /
+            (255 * (259 - contrast));
+
+
+        for(let i=0;i<data.length;i+=4){
+
+            let r = data[i];
+            let g = data[i+1];
+            let b = data[i+2];
+
+
+            if(contrast !== 0){
+
+                r = factor * (r - 128) + 128;
+                g = factor * (g - 128) + 128;
+                b = factor * (b - 128) + 128;
+
+            }
+
+
+            data[i] =
+                Math.max(0,Math.min(255,r));
+
+            data[i+1] =
+                Math.max(0,Math.min(255,g));
+
+            data[i+2] =
+                Math.max(0,Math.min(255,b));
+
+
+            /* ======================
+               FONDO TRANSPARENTE
+            ====================== */
+
+            if(transparent){
+
+                if(
+                    data[i] > 245 &&
+                    data[i+1] > 245 &&
+                    data[i+2] > 245
+                ){
+
+                    data[i+3] = 0;
+
+                }
+
+            }
+
+        }
+
+
+        ctx.putImageData(
+            imageData,
+            0,
+            0
+        );
+
+
+        /* ==========================
+           SEMITONO
+        ========================== */
+
+        if(halftone !== "none"){
+
+            createHalftone(
+                ctx,
+                widthPx,
+                heightPx,
+                halftone
+            );
+
+        }
+
+
+        resultCanvas = canvas;
+
+
+        document
+        .getElementById("resultImage")
+        .src = canvas.toDataURL("image/png");
+
+
+        document
+        .getElementById("resultSize")
+        .textContent =
+            widthCm + " × " +
+            heightCm + " cm";
+
+
+        document
+        .getElementById("resultBackground")
+        .textContent =
+            transparent
+            ? "Transparente"
+            : "Original";
+
+
+        document
+        .getElementById("resultCard")
+        .classList.remove("hidden");
+
+
+        status(
+            "✅ Imagen preparada correctamente."
+        );
+
+
+    },100);
+
+}
+
+
+/* ================================
+   SEMITONO
+================================ */
+
+function createHalftone(
+    ctx,
+    width,
+    height,
+    type
+){
+
+    const spacing = 8;
+
+    const imageData =
+        ctx.getImageData(
+            0,
+            0,
+            width,
+            height
+        );
+
+    const data =
+        imageData.data;
+
+
+    ctx.clearRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    for(
+        let y=0;
+        y<height;
+        y+=spacing
+    ){
+
+        for(
+            let x=0;
+            x<width;
+            x+=spacing
+        ){
+
+            const index =
+                (y * width + x) * 4;
+
+
+            const r =
+                data[index];
+
+            const g =
+                data[index+1];
+
+            const b =
+                data[index+2];
+
+            const a =
+                data[index+3];
+
+
+            if(a === 0) continue;
+
+
+            const brightness =
+                (r+g+b)/3;
+
+
+            const size =
+                (1 - brightness/255)
+                * spacing;
+
+
+            if(size <= 0.5) continue;
+
+
+            ctx.fillStyle =
+                "rgba("+
+                r+","+
+                g+","+
+                b+","+
+                (a/255)+")";
+
+
+            if(type === "dots"){
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    x,
+                    y,
+                    size/2,
+                    0,
+                    Math.PI*2
+                );
+
+                ctx.fill();
+
+            }
+
+
+            if(type === "square"){
+
+                ctx.fillRect(
+                    x-size/2,
+                    y-size/2,
+                    size,
+                    size
+                );
+
+            }
+
+        }
+
+    }
+
+}
+
+
+/* ================================
+   DESCARGAR
+================================ */
+
+function downloadPNG(){
+
+    if(!resultCanvas){
+
+        alert("Primero prepará la imagen.");
+
+        return;
+    }
+
+
+    const link =
+        document.createElement("a");
+
+
+    link.download =
+        "DTF-Studio-300DPI.png";
+
+
+    link.href =
+        resultCanvas.toDataURL(
+            "image/png"
+        );
+
+
+    link.click();
+
+}
+
+
+/* ================================
+   RESTABLECER
+================================ */
+
+function resetImage(){
+
+    if(!originalImage) return;
+
+    document
+    .getElementById("resultCard")
+    .classList.add("hidden");
+
+    document
+    .getElementById("contrast")
+    .value = 0;
+
+    document
+    .getElementById("sharpness")
+    .value = 0;
+
+    document
+    .getElementById("contrastValue")
+    .textContent = 0;
+
+    document
+    .getElementById("sharpValue")
+    .textContent = 0;
+
+    document
+    .getElementById("halftone")
+    .value = "none";
+
+    status("Imagen restablecida.");
+
+}
+
+
+/* ================================
+   ESTADO
+================================ */
+
+function status(text){
+
+    document
+    .getElementById("status")
+    .textContent = text;
+
+}
+
+</script>
+
+</body>
+</html>
